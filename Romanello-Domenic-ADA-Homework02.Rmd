@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Every Saturday, at the same time, a primatologist goes and sits in the forest in the morning and listens for titi monkey calls, counting the number of calls they hear in a 2 hour window from 5am to 7am. Based on previous knowledge, she believes that the mean number calls she will hear in that time is 15. Let X represent the appropriate Poisson random variable of the number of calls heard in each monitoring session. 
 
-1.a. What is the probability that she will hear more than 8 calls during any given session? 
+1.a. What is the probability that she will hear more than 8 calls during any given session?  0.9625535
 
 ```{r}
 x <- 0:30
@@ -24,7 +24,7 @@ l = 15
 ppois(8,l, lower=FALSE)
 ```
 
-1.b. What is the probability that she will hear no calls in a session?
+1.b. What is the probability that she will hear no calls in a session? 3.059023e-07
 
 ```{r}
 x <- 0:30
@@ -33,7 +33,7 @@ l = 15
 ppois(0,l)
 ```
 
-1.c. What is the probability that she will hear exactly 3 calls in a session?
+1.c. What is the probability that she will hear exactly 3 calls in a session? 0.0001720701
 
 ```{r}
 dpois (x=3, lambda = 15)
@@ -203,28 +203,123 @@ mean(dsample$years_of_education)
 sd(dsample$years_of_education)
 se(dsample$years_of_education)
 
+a <- mean(dsample$height)
+s <- sd(dsample$height)
+n <- 30
+error <- qnorm(0.975)*s/sqrt(n)
+left <- a-error
+right <- a+error
+left
+right
+
+a <- mean(dsample$weight)
+s <- sd(dsample$weight)
+n <- 30
+error <- qnorm(0.975)*s/sqrt(n)
+left <- a-error
+right <- a+error
+left
+right
+
+a <- mean(dsample$age)
+s <- sd(dsample$age)
+n <- 30
+error <- qnorm(0.975)*s/sqrt(n)
+left <- a-error
+right <- a+error
+left
+right
+
+a <- mean(dsample$zombies_killed)
+s <- sd(dsample$zombies_killed)
+n <- 30
+error <- qpois(0.975, 3.433333,lower.tail = TRUE, log.p = FALSE)*s/sqrt(n)
+left <- a-error
+right <- a+error
+left
+right
+
+a <- mean(dsample$years_of_education)
+s <- sd(dsample$years_of_education)
+n <- 30
+error <- qpois(0.975, 2.5333,lower.tail = TRUE, log.p = FALSE)*s/sqrt(n)
+left <- a-error
+right <- a+error
+left
+right
 
 ```
 
 2.f. Now draw 99 more random samples of 30 zombies out and calculate the mean for each of the these samples. Together with the first sample you drew out, you now have a set of 100 means for each variable (each based on 30 observations), which constitutes a sampling distribution for each variable. What are the means and standard deviations of the sampling distribution for each variable? How do the standard deviations compare to the standard errors estimated in [2.e.]? What do these sampling distributions look like? Are they normally distributed? What about for those variables that you concluded were not originally drawn from a normal distribution?
 
+For the most part the standard deviations are much higher or just slightly higher than the standard errors from 2e. The distributions appear normal except for years of education and zombies killed. 
+
 ```{r}
 
-k <- 99 
+library(dplyr)
+
+k <- 99
 n <- 30 
-s <- NULL  
+dsample2f <- NULL 
+dsampleheightmean<- NULL
+dsampleheightsd<- NULL
+dsampleheightse<-NULL
+dsampleweightmean<-NULL
+dsampleweightsd<-NULL
+dsampleweightse<-NULL
+dsampleagemean<-NULL
+dsampleagesd<-NULL
+dsampleagese<-NULL
+dsamplekillmean<-NULL
+dsamplekillsd<-NULL
+dsamplekillse<-NULL
+dsampleedmean<-NULL
+dsampleedsd<-NULL
+dsampleedse<-NULL
+
 for (i in 1:k) {
-    s[[i]] <- sample(k, size = n, replace = FALSE)
+  
+dsample2f <- sample_n(d, size = n, replace = FALSE)
+
+dsampleheightmean <- mean(dsample2f$height)
+dsampleheightsd <- sd(dsample2f$height)
+dsampleheightse<- se(dsample2f$height)
+dsampleweightmean<- mean(dsample2f$weight)
+dsampleweightsd<- sd(dsample2f$weight)
+dsampleweightse<- se(dsample2f$weight)
+dsampleagemean<- mean(dsample2f$age)
+dsampleagesd<- sd(dsample2f$age)
+dsampleagese<- se(dsample2f$age)
+dsamplekillmean<- mean(dsample2f$age)
+dsamplekillsd<- sd(dsample2f$zombies_killed)
+dsamplekillse<- se(dsample2f$zombies_killed)
+dsampleedmean<- mean(dsample2f$years_of_education)
+dsampleedsd<- sd(dsample2f$years_of_education)
+dsampleedse<- se(dsample2f$years_of_education)
+
 }
+
 head(s)
 
-m <- NULL
-for (i in 1:k) {
-    m[i] <- mean(s[[i]])
-}
+se(dsample$height)
+sd(dsample2f$height)
+hist(dsample2f$height)
 
-mean(m)
+se(dsample$weight)
+sd(dsample2f$weight)
+hist(dsample2f$weight)
 
-mu
+se(dsample$age)
+sd(dsample2f$age)
+hist(dsample2f$age)
+
+se(dsample$zombies_killed)
+sd(dsample2f$zombies_killed)
+hist(dsample2f$zombies_killed)
+
+se(dsample$years_of_education)
+sd(dsample2f$years_of_education)
+hist(dsample2f$years_of_education)
 
 ```
+
